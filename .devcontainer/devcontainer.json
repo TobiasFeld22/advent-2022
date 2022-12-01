@@ -1,0 +1,38 @@
+{
+	"name": "Advent-2022",
+	"extensions": [
+		"cschleiden.vscode-github-actions",
+		"ms-vsliveshare.vsliveshare",
+		"matklad.rust-analyzer",
+		"serayuzgur.crates",
+		"vadimcn.vscode-lldb"
+	],
+	"dockerFile": "Dockerfile",
+	"settings": {
+		"editor.formatOnSave": true,
+		// "terminal.integrated.shell.linux": "/usr/bin/zsh",
+		"terminal.integrated.profiles.linux": {
+			"Command Prompt": {
+				"path": [
+					"/usr/bin/zsh",
+					"/usr/bin/zsh"
+				],
+				"args": [],
+				"icon": "terminal-cmd"
+			}
+		},
+		"files.exclude": {
+			"**/CODE_OF_CONDUCT.md": true,
+			"**/LICENSE": true
+		}
+	},
+	"customizations": {
+		"codespaces": {
+			"repositories": {
+				"TobiasFeld22/advent-2022": {
+					"permissions": "write-all"
+				}
+			}
+		}
+	}
+}
