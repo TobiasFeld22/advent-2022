@@ -1,5 +1,14 @@
 ## update and install some things we should probably have
+
 apt-get update
+
+# Allow newer versions of git to be added.
+apt install -y software-properties-common
+add-apt-repository ppa:git-core/ppa -y
+apt-get update
+
+
+
 apt-get install -y \
   curl \
   git \
