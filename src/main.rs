@@ -16,5 +16,5 @@ fn main() {
 
     sum_items.sort_by(|a, b| b.cmp(a));
 
-    println!("{}", sum_items[0]);
+    println!("{}", sum_items[0] + sum_items[1] + sum_items[2]);
 }
