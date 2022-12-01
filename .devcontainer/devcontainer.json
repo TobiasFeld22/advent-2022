@@ -13,10 +13,7 @@
 		// "terminal.integrated.shell.linux": "/usr/bin/zsh",
 		"terminal.integrated.profiles.linux": {
 			"Command Prompt": {
-				"path": [
-					"/usr/bin/zsh",
-					"/usr/bin/zsh"
-				],
+				"path": "/usr/bin/zsh",
 				"args": [],
 				"icon": "terminal-cmd"
 			}
