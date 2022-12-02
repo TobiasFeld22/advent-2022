@@ -14,6 +14,24 @@ impl RPSOption {
             _ => panic!("Unknown input {}", input.as_bytes()[0]),
         }
     }
+
+    pub fn get_from_new_guide(r_input: &RPSOption, input: &str) -> RPSOption {
+        match (r_input, input.chars().nth(0).unwrap()) {
+            (RPSOption::Paper, 'X') => Self::Rock,
+            (RPSOption::Paper, 'Y') => Self::Paper,
+            (RPSOption::Paper, 'Z') => Self::Scissors,
+
+            (RPSOption::Rock, 'X') => Self::Scissors,
+            (RPSOption::Rock, 'Y') => Self::Rock,
+            (RPSOption::Rock, 'Z') => Self::Paper,
+
+            (RPSOption::Scissors, 'X') => Self::Paper,
+            (RPSOption::Scissors, 'Y') => Self::Scissors,
+            (RPSOption::Scissors, 'Z') => Self::Rock,
+
+            _ => panic!("Unknown input {}", input.as_bytes()[0]),
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -33,6 +51,22 @@ impl RPSGuess {
             } else {
                 guess = Some(RPSOption::get_from_string(i.trim()))
             }
+        });
+        return RPSGuess {
+            guess: guess.unwrap(),
+            answer: answer.unwrap(),
+        };
+    }
+
+    pub fn new_part_2(input_pair: &str) -> Self {
+        let mut guess: Option<RPSOption> = None;
+        let mut answer: Option<RPSOption> = None;
+        let input = input_pair.split(" ");
+        input.for_each(|i| {
+            match &mut guess {
+                Some(cguess) => answer = Some(RPSOption::get_from_new_guide(cguess, i)),
+                None => guess = Some(RPSOption::get_from_string(i.trim())),
+            };
         });
         return RPSGuess {
             guess: guess.unwrap(),

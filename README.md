@@ -1,8 +1,8 @@
 # advent-2022
 
-A / X = Rock
-B / Y = Paper
-C / Z = Scissors
+A = Rock
+B = Paper
+C = Scissors
 
 scores:
 
@@ -13,3 +13,7 @@ scores:
 0 = lost
 3 = draw
 6 = win
+
+X = lose
+Y = draw
+Z = win
