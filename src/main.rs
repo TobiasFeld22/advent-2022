@@ -21,7 +21,7 @@ fn main() {
     for pair in pairs {
         let first = pair.0;
         let second = pair.1;
-        if first.does_contain_other_section(second) || second.does_contain_other_section(first) {
+        if first.overlaps(second) {
             nr += 1;
         }
     }
