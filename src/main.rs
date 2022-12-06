@@ -2,7 +2,11 @@ use itertools::Itertools;
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::{
-    collections::{hash_map::Values, HashMap},
+    collections::{
+        hash_map::Values,
+        vec_deque::{self, VecDeque},
+        HashMap,
+    },
     fs,
 };
 
@@ -20,7 +24,8 @@ fn main() {
     let mut data = fill_stacks(stacks);
 
     for instruction in instructions.split("\n") {
-        parse_instructions(&mut data, InstructionSet::new(instruction));
+        // parse_instructions(&mut data, InstructionSet::new(instruction));
+        parse_instructions_but_more(&mut data, InstructionSet::new(instruction));
     }
 
     // Get solution string
@@ -48,6 +53,28 @@ fn parse_instructions(data: &mut HashMap<i32, Vec<char>>, instruction: Instructi
                 .expect("Stack to index doesn't exist")
                 .push(from);
         }
+    }
+}
+
+fn parse_instructions_but_more(data: &mut HashMap<i32, Vec<char>>, instruction: InstructionSet) {
+    let mut temp = VecDeque::<char>::new();
+    let from = data
+        .get_mut(&instruction.from)
+        .expect("Stack from index doesn't exist");
+
+    {
+        for _ in 0..instruction.amount {
+            let item = from.pop();
+
+            if let Some(item) = item {
+                temp.push_front(item);
+            }
+        }
+    }
+    for _ in 0..temp.len() {
+        data.get_mut(&instruction.to)
+            .expect("Stack to index doesn't exist")
+            .push(temp.pop_front().expect("Nothing in temp anymore"));
     }
 }
 
