@@ -1,5 +1,3 @@
-mod node;
-
 use std::{collections::HashMap, fs};
 
 use lazy_static::lazy_static;
@@ -30,7 +28,15 @@ fn main() {
         }
     }
     let totals: u32 = directory_size.values().filter(|&size| *size < 100000).sum();
-    println!("{}", totals);
+    let root = String::from("/");
+    let space: u32 = 30000000 - (70000000 - directory_size.get(&root).unwrap());
+    let min = directory_size
+        .iter()
+        .filter(|(_dir, &size)| size >= space)
+        .min_by(|a, b| a.1.cmp(&b.1))
+        .map(|(_, size)| size)
+        .unwrap();
+    println!("{}", min);
 }
 
 fn parse_cd(line: &str, path: &mut Vec<String>, dir_sizes: &mut HashMap<String, u32>) {
