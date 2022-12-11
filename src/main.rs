@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs};
+use std::{collections::HashMap, convert::TryInto, fs};
 
 fn main() {
     let input = fs::read_to_string("input.txt").expect("file input");
@@ -22,11 +22,12 @@ fn main() {
         }
     });
     let mut register_x = 1;
+    let mut crt: Vec<Vec<String>> = vec![vec![]; 6];
     let max = cycle_instructions.keys().max().unwrap();
-    let mut sum = 0;
-    for i in 0..*max {
-        let id = i + 1;
 
+    for i in 0..*max {
+        let pixel = i % 40;
+        let row: usize = (i / 40).try_into().unwrap();
         let entry = cycle_instructions.get(&i);
         match entry {
             Some(instruction) => match instruction {
@@ -35,13 +36,15 @@ fn main() {
             },
             None => (),
         }
-        println!("[{}] {}", (i + 1), register_x);
-        if id == 20 || id == 60 || id == 100 || id == 140 || id == 180 || id == 220 {
-            println!("[Sum_here, {}] {}", id, id * register_x);
-            sum += id * register_x;
+        if (register_x - pixel).abs() <= 1 {
+            crt[row].push("#".to_string());
+        } else {
+            crt[row].push(".".to_string());
         }
     }
-    println!("[Sum] {}", sum);
+    for row in crt {
+        println!("{}", row.join(""))
+    }
 }
 
 #[derive(Debug)]
