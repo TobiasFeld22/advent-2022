@@ -14,9 +14,9 @@ fn main() {
     println!("Hello, world!");
 
     let input = fs::read_to_string("input.txt").expect("file_input");
-    let mut monkeys = parse_monkeys(&input);
+    let (m, mut monkeys) = parse_monkeys(&input);
 
-    for c in 0..20 {
+    for c in 0..100000 {
         for i in 0..=*monkeys.keys().max().unwrap() {
             {
                 let mut monkey = monkeys.get_mut(&i).unwrap().clone();
@@ -42,7 +42,7 @@ fn main() {
                             OperationAmount::OLD => item - item,
                         },
                     };
-                    let new_item = new_item / 3;
+                    let new_item = new_item % m;
                     {
                         if new_item % monkey.divisible_by == 0 {
                             monkeys
@@ -71,10 +71,10 @@ fn main() {
     println!("{:?}", results[0].1 * results[1].1);
 }
 
-fn parse_monkeys(input: &str) -> HashMap<usize, Monkey> {
+fn parse_monkeys(input: &str) -> (usize, HashMap<usize, Monkey>) {
     let split = input.split("\n\n");
     let mut monkeys = HashMap::<usize, Monkey>::new();
-
+    let mut m = 1;
     for (index, chunk) in split.enumerate() {
         let captures = RE.captures(chunk);
         for capture in captures {
@@ -85,6 +85,14 @@ fn parse_monkeys(input: &str) -> HashMap<usize, Monkey> {
                 .split(",")
                 .map(|item| item.trim().parse::<usize>().unwrap())
                 .collect::<VecDeque<usize>>();
+            let div_condition = capture
+                .name("div_by")
+                .unwrap()
+                .as_str()
+                .parse::<usize>()
+                .unwrap();
+
+            m *= div_condition;
 
             let monkey = Monkey {
                 inspection_count: 0,
@@ -104,12 +112,7 @@ fn parse_monkeys(input: &str) -> HashMap<usize, Monkey> {
                         Err(_) => OperationAmount::OLD,
                     }
                 },
-                divisible_by: capture
-                    .name("div_by")
-                    .unwrap()
-                    .as_str()
-                    .parse::<usize>()
-                    .unwrap(),
+                divisible_by: div_condition,
                 true_monkey: capture
                     .name("true_monkey")
                     .unwrap()
@@ -126,7 +129,7 @@ fn parse_monkeys(input: &str) -> HashMap<usize, Monkey> {
             monkeys.insert(monkey.id, monkey);
         }
     }
-    monkeys
+    (m, monkeys)
 }
 
 #[derive(Debug, Clone)]
